@@ -8,295 +8,236 @@ app_port: 7860
 python_version: 3.9
 ---
 
-# 🐾 Animal Classifier
+# Animal Classifier 🐾
 
-A state-of-the-art deep learning application that classifies images as **Cat**, **Dog**, or **Panda** using ResNet50 transfer learning with a beautiful interactive Streamlit interface.
+This project is a deep learning app that classifies images as Cat, Dog, or Panda using a fine-tuned ResNet50 model. It includes a clean Streamlit interface and is fully optimized for Hugging Face Spaces.
 
-## 🎯 Features
+## Features
 
-### 📸 **Smart Image Classification**
-- Upload images in JPG, JPEG, PNG, or WebP formats
-- Real-time classification with confidence scores
-- Interactive probability visualization with Plotly charts
-- Auto-download model from Hugging Face if not present
-- Support for multiple image formats and sizes
+### Smart Image Classification
+- Upload JPG, JPEG, PNG, or WebP images
+- Real-time predictions with confidence scores
+- Plotly charts to show probabilities
+- Automatic model download from Hugging Face
+- Works with different image sizes and formats
 
-### 📊 **Comprehensive Analytics**
-- **Performance Metrics**: Detailed per-class precision, recall, F1-scores
-- **Confusion Matrix**: Interactive heatmap visualization with percentages
-- **Training History**: Loss and accuracy plots over epochs
-- **Model Details**: Architecture insights and specifications
-- **Export Options**: Download metrics as CSV or JSON
+### Analytics
+- Detailed precision, recall, and F1-scores for each class
+- Confusion matrix with interactive heatmap
+- Training history plots for loss and accuracy
+- Model architecture breakdown
+- Export metrics as CSV or JSON
 
-### 🎨 **Beautiful Interface**
-- Modern, responsive UI with custom CSS styling
-- Mobile-friendly design with gradient cards
-- Interactive gauge charts for confidence visualization
-- Intuitive navigation with sidebar controls
-- Real-time model status indicators
+### Interface
+- Clean, modern UI with custom styling
+- Works well on desktop and mobile
+- Confidence gauge charts
+- Sidebar navigation
+- Live model status display
 
-## 🏗️ Model Architecture
+## Model Architecture
 
-This project uses **transfer learning** with a pre-trained ResNet50 model:
+This project uses transfer learning with ResNet50:
 
-- **Base Model**: ResNet50 (ImageNet pre-trained)
-- **Fine-tuned Layers**: Layer4 + Custom Classifier
-- **Custom Head**: 
-  - Linear(2048 → 512) + ReLU + Dropout(0.7)
-  - Linear(512 → 128) + ReLU + Dropout(0.3) 
-  - Linear(128 → 3) [Output layer]
-- **Classes**: Cat 🐱, Dog 🐕, Panda 🐼
-- **Auto-Download**: Model automatically downloads from Hugging Face
-- **Device Support**: CPU/GPU auto-detection
+- Base model: ResNet50 (ImageNet pre-trained)
+- Fine-tuned layers: Layer4 + custom classifier
+- Classifier:
+  - Linear 2048 → 512 + ReLU + Dropout 0.7
+  - Linear 512 → 128 + ReLU + Dropout 0.3
+  - Linear 128 → 3 (output layer)
+- Classes: Cat, Dog, Panda
+- Model auto-downloads on first run
+- Runs on CPU or GPU
 
-## 📊 Performance Metrics
+## Performance
 
-- **Test Accuracy**: **99.33%**
-- **Cat Classification**: 99.00% F1-Score (Precision: 98.51%, Recall: 99.50%)
-- **Dog Classification**: 98.99% F1-Score (Precision: 99.49%, Recall: 98.50%)  
-- **Panda Classification**: 100.00% F1-Score (Perfect classification!)
-- **Macro Average**: 99.33% F1-Score
-- **Weighted Average**: 99.33% F1-Score
+- Test accuracy: 99.33%
+- Cat F1-score: 99.00%
+- Dog F1-score: 98.99%
+- Panda F1-score: 100.00%
+- Macro average F1-score: 99.33%
+- Weighted average F1-score: 99.33%
 
-## 📁 Project Structure
+## Project Structure
 
-```
 Animal-classification-deploy/
-├── 🐳 Dockerfile                           # Docker configuration for deployment
-├── 📱 app.py                              # Main Streamlit application (920 lines)
-├── 📓 cat-dog-pandas-classification.ipynb # Complete training notebook
-├── 🧠 model.pth                           # Trained ResNet50 weights (auto-downloaded)
-├── 📈 metrics.json                        # Comprehensive performance data
-├── 📋 requirements.txt                    # Optimized dependencies (CPU PyTorch)
-├── 🖼️ confusion_matrix.png               # Confusion matrix visualization
-└── 🔧 datasplit.py                       # Dataset preparation utilities
-```
+├── Dockerfile
+├── app.py
+├── cat-dog-pandas-classification.ipynb
+├── model.pth
+├── metrics.json
+├── requirements.txt
+├── confusion_matrix.png
+└── datasplit.py
 
-## 🚀 Quick Start
 
-### Local Development
+## Quick Start
 
-1. **Clone & Navigate:**
-   ```bash
-   git clone <your-repo>
-   cd Animal-classification-deploy
-   ```
+### Local Setup
 
-2. **Install Dependencies:**
-   ```bash
-   pip install -r requirements.txt
-   ```
+1. Clone the repository:
+git clone <your-repo>
+cd Animal-classification-deploy
 
-3. **Run Application:**
-   ```bash
-   streamlit run app.py
-   ```
 
-4. **Open Browser:** `http://localhost:8501`
+2. Install dependencies:
+pip install -r requirements.txt
+
+3. Run the app:
+streamlit run app.py
+
+4. Open: http://localhost:8501
 
 ### Docker Deployment
 
-1. **Build Image:**
-   ```bash
-   docker build -t animal-classifier .
-   ```
+1. Build the Docker image:
+docker build -t animal-classifier .
 
-2. **Run Container:**
-   ```bash
-   docker run -p 7860:7860 animal-classifier
-   ```
+2. Run the container:
+docker run -p 7860:7860 animal-classifier
 
-3. **Access App:** `http://localhost:7860`
+3. Open: http://localhost:7860
 
-## 🤗 Hugging Face Spaces Deployment
+## Hugging Face Spaces Deployment (Recommended)
 
-### Docker-based Deployment (Recommended)
+### Step 1: Create a Space
+- Go to Hugging Face Spaces
+- Select Docker as SDK
+- Set app_port to 7860
 
-This project is optimized for **Docker deployment** on Hugging Face Spaces:
-
-#### **Step 1: Create Space**
-- Go to [Hugging Face Spaces](https://huggingface.co/new-space)
-- Choose **Docker** as SDK
-- Set **app_port: 7860**
-- Select visibility (Public/Private)
-
-#### **Step 2: Upload Files**
-Upload all project files via Git or web interface:
-
-```bash
+### Step 2: Upload Files
 git clone https://huggingface.co/spaces/yourusername/animal-classifier
 cd animal-classifier
 
-# Copy project files
 cp Animal-classification-deploy/* .
-
-# For large model files (>10MB), use Git LFS
 git lfs install
 git lfs track "*.pth"
-git add .gitattributes
-
-# Deploy
 git add .
-git commit -m "Deploy animal classifier with Docker"
+git commit -m "Deploy animal classifier"
 git push
-```
 
-#### **Step 3: Configuration**
-The project includes optimal configuration:
-- **🐳 Dockerfile**: Multi-stage build with security best practices
-- **📦 requirements.txt**: CPU-optimized PyTorch for faster deployment
-- **📝 README.md**: Proper Hugging Face Space headers
 
-### **Deployment Benefits:**
-- ⚡ **Fast Build**: CPU-only PyTorch (~3-5 min build time)
-- 💾 **Efficient**: ~800MB final image (vs 2GB+ with full PyTorch)
-- 🔒 **Secure**: Non-root user, proper health checks
-- 💰 **Cost-effective**: Runs perfectly on free CPU tier
+### Step 3: Configuration
+- Dockerfile optimized for CPU
+- requirements.txt includes lightweight packages
+- README contains the correct Space metadata
 
-## 🛠️ Technical Details
+## Technical Details
 
-### **Dependencies (Optimized for Docker)**
-```txt
-streamlit>=1.34.0          # Web framework
-torch==2.0.0+cpu           # PyTorch (CPU-optimized)
-torchvision==0.15.1+cpu    # Computer vision utilities
-numpy==1.24.3              # Numerical computing
-pandas==2.0.3              # Data manipulation
-pillow==10.0.0             # Image processing
-plotly==5.15.0             # Interactive visualizations
-matplotlib==3.9.2         # Additional plotting support
-```
+### Dependencies
+streamlit>=1.34.0
+torch==2.0.0+cpu
+torchvision==0.15.1+cpu
+numpy==1.24.3
+pandas==2.0.3
+pillow==10.0.0
+plotly==5.15.0
+matplotlib==3.9.2
 
-### **Training Configuration**
-- **Optimizer**: AdamW (lr=5e-6, weight_decay=5e-4)
-- **Loss Function**: CrossEntropyLoss with Label Smoothing (0.1)
-- **Batch Size**: 32
-- **Max Epochs**: 20 (Early Stopping: patience=5)
-- **Data Augmentation**: Random crop, flip, rotation, color jitter
+### Training Settings
+- Optimizer: AdamW (lr=5e-6)
+- Loss: CrossEntropy with label smoothing
+- Batch size: 32
+- Epochs: 20 (with early stopping)
+- Augmentation: crop, flip, rotation, color jitter
 
-### **Model Specifications**
-- **Total Parameters**: ~24M
-- **Trainable Parameters**: ~16M
-- **Input Size**: 224×224 RGB
-- **Normalization**: ImageNet statistics
-- **Device Support**: CPU/GPU (auto-detection)
+### Model Specs
+- Parameters: ~24M total
+- Trainable: ~16M
+- Input: 224x224 RGB
+- Normalized using ImageNet stats
 
-## 💡 Usage Examples
+## Usage
 
-### **Basic Classification**
-1. Launch the application
-2. Navigate to **🔮 Prediction** tab
-3. Upload an image (JPG/PNG/WebP)
-4. Click **🔍 Classify Image**
-5. View results with confidence scores
+### Basic Classification
+1. Open the app
+2. Go to the Prediction tab
+3. Upload an image
+4. Press "Classify Image"
+5. View confidence scores and charts
 
-### **Performance Analysis**
-1. Go to **📊 Model Metrics** tab
-2. Explore **Overview** for key metrics
-3. Check **Confusion Matrix** for detailed analysis
-4. Review **Training History** for learning curves
+### Performance Analysis
+- Open the Model Metrics tab
+- View performance summaries
+- Check confusion matrix
+- Review training curves
 
-### **API Integration** (Advanced)
-The model can be loaded programmatically:
-```python
+### Programmatic Model Loading
 import torch
 from torchvision import models
 
-# Load model
 model = models.resnet50(weights=None)
 model.load_state_dict(torch.load('model.pth', map_location='cpu'))
 model.eval()
-```
 
-## 📈 Dataset Information
 
-**Cat-Dog-Pandas Dataset** (Custom curated):
-- **Test Set**: 600 images (200 per class)
-- **Classes**: Balanced distribution (Cat, Dog, Panda)
-- **Resolution**: Variable (resized to 224×224 during training)
-- **Data Split**: Train/Validation/Test (exact ratios from training notebook)
-- **Quality**: High-quality, curated images for optimal performance
+## Dataset
 
-## 🔧 Development & Customization
+- Cat, Dog, Panda dataset (balanced)
+- 600 test images (200 per class)
+- Images resized to 224x224 during preprocessing
+- Train/Val/Test splits included in the notebook
 
-### **Local Development Setup**
-```bash
-# Clone repository
+## Development
+
+### Local Development
 git clone <your-repo-url>
 cd Animal-classification-deploy
-
-# Create virtual environment
 python -m venv venv
-source venv/bin/activate  # On Windows: venv\Scripts\activate
-
-# Install dependencies
+source venv/bin/activate
 pip install -r requirements.txt
-
-# Run development server
 streamlit run app.py
-```
 
-### **Model Retraining**
-Use the included Jupyter notebook:
-```bash
+
+### Retraining the Model
+Open the notebook:
 jupyter notebook cat-dog-pandas-classification.ipynb
-```
 
-### **Adding New Classes**
-1. Update dataset structure in your dataset folder
-2. Modify `class_names` in `app.py` and `metrics.json`
-3. Retrain model with updated data
-4. Update `model.pth` with new weights
 
-## 🚀 Production Deployment Options
+### Adding New Classes
+- Update dataset folders
+- Update class names in app.py and metrics.json
+- Retrain the model
 
-### **1. Hugging Face Spaces (Recommended)**
-- ✅ Free hosting
-- ✅ Automatic HTTPS
-- ✅ Global CDN
-- ✅ Built-in analytics
-- ✅ Easy sharing
+## Deployment Options
 
-### **2. Docker Self-hosted**
-```bash
+### Hugging Face Spaces
+- Free hosting
+- HTTPS included
+- Easy sharing
+
+### Docker Self-hosting
 docker build -t animal-classifier .
-docker run -d -p 7860:7860 --name classifier animal-classifier
-```
+docker run -d -p 7860:7860 animal-classifier
 
-### **3. Cloud Platforms**
-- **AWS**: ECS/Fargate deployment
-- **Google Cloud**: Cloud Run
-- **Azure**: Container Instances
-- **Railway**: Direct Docker deployment
+markdown
+Copy code
 
-## 📚 Project Highlights
+### Cloud Platforms
+- AWS ECS / Fargate
+- Google Cloud Run
+- Azure Container Instances
+- Railway
 
-- 🎯 **State-of-the-art Accuracy**: 99.33% test accuracy
-- 🏗️ **Production Ready**: Docker containerized, optimized for deployment
-- 🎨 **Beautiful UI**: Modern Streamlit interface with custom styling and interactive charts
-- 📊 **Comprehensive Analytics**: Full performance metrics, confusion matrix, and training history
-- 🔬 **Reproducible**: Complete training pipeline in Jupyter notebook
-- ⚡ **Fast Inference**: CPU-optimized for real-time predictions
-- 📱 **Mobile Friendly**: Responsive design for all devices
-- 🔒 **Secure**: Docker best practices with non-root user
-- 🤗 **Auto-Download**: Model automatically downloads from Hugging Face
-- 📈 **Interactive Visualizations**: Plotly charts for probabilities and metrics
+## Highlights
+- 99.33% accuracy
+- Dockerized and production-ready
+- Clean UI with interactive visualizations
+- Full analytics included
+- Model auto-downloads
+- Works on mobile
+- Fast inference even on CPU
 
-## 🤝 Contributing
+## Contributing
+1. Fork the repo  
+2. Create branch: `git checkout -b feature-name`  
+3. Commit: `git commit -am "Add feature"`  
+4. Push: `git push origin feature-name`  
+5. Open a pull request  
 
-1. Fork the repository
-2. Create feature branch: `git checkout -b feature-name`
-3. Commit changes: `git commit -am 'Add feature'`
-4. Push to branch: `git push origin feature-name`
-5. Submit pull request
-
-## 📄 License
-
-This project is open source and available under the Apache 2.0 License.
-
+## License
+Apache 2.0 License
 
 ---
 
-**Built with ❤️ using PyTorch, Streamlit, and Docker by Sanjay Sivaramakrishnan** 
-
-*Ready for production deployment on Hugging Face Spaces! 🚀*
+Built using PyTorch, Streamlit, and Docker by Sai Sanjiv R.
